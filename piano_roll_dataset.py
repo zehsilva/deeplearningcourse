@@ -26,5 +26,8 @@ class pianoroll_dataset_batch(Dataset):
     def __getitem__(self, idx):
         return  self.data[idx]
     
-    def set_tags(lst_tags):
+    def set_tags(self,lst_tags):
         self.tags = lst_tags
+        
+    def view_pianoroll(self,idx):
+        datp.visualize_piano_roll(self[idx])
