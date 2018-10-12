@@ -7,6 +7,11 @@ import os
 import pypianoroll as pproll
 import sys
 import argparse
+import IPython
+
+### need also to install fluidsynth to be able to synthesize midi file to audio (pip install fluidsynth)
+
+
 
 
 def piano_roll_to_pretty_midi(piano_roll, fs=100, program=0):
@@ -137,5 +142,9 @@ def visualize_piano_roll(pianoroll_matrix):
     # Plot the piano-roll
     fig, ax = track.plot()
     plt.show()
+
+def embed_play_v1(piano_roll_matrix):
+    return IPython.display.Audio(data=piano_roll_to_pretty_midi(piano_roll_matrix).synthesize(),rate=44100)
     
+
     
