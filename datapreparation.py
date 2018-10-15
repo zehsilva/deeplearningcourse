@@ -6,7 +6,6 @@ import pretty_midi
 import os
 import pypianoroll as pproll
 import sys
-import argparse
 import IPython
 
 ### need also to install fluidsynth to be able to synthesize midi file to audio (pip install fluidsynth)
@@ -14,7 +13,7 @@ import IPython
 
 
 
-def piano_roll_to_pretty_midi(piano_roll, fs=100, program=0):
+def piano_roll_to_pretty_midi(piano_roll, fs=100, program=2):
     '''Convert a Piano Roll array into a PrettyMidi object
      with a single instrument.
 
