@@ -104,7 +104,7 @@ def load_all_dataset(dirpath):
         input: path a diretory
         output: list of numpy arrays
     """
-    return [pd.read_csv(os.path.join(dirpath, file)).values for file in os.listdir(dirpath) if file.endswith(".csv")]
+    return [pd.read_csv(os.path.join(dirpath, file)).values for file in sorted(os.listdir(dirpath)) if file.endswith(".csv")]
 
 def load_all_dataset_names(dirpath):
     """ given a diretory finds all the csv in the diretory an split the first part
@@ -112,7 +112,7 @@ def load_all_dataset_names(dirpath):
         input: path a diretory
         output: list of strings
     """
-    return [file.split('_')[0] for file in os.listdir(dirpath) if file.endswith(".csv")]
+    return [file.split('_')[0] for file in sorted(os.listdir(dirpath)) if file.endswith(".csv")]
 
 def get_max_length(dataset):
     """ find the maximum length of piano roll matrices in a list of matrices
