@@ -7,7 +7,7 @@ import os
 import pypianoroll as pproll
 import sys
 import IPython
-
+import fluidsynth
 ### need also to install fluidsynth to be able to synthesize midi file to audio (pip install fluidsynth)
 
 
@@ -69,45 +69,49 @@ def piano_roll_to_pretty_midi(piano_roll, fs=100, program=2):
 
 
 
-def midfile_to_piano_roll(filepath):
+def midfile_to_piano_roll(filepath,fs=100):
     """ convert a mid file to a piano roll matrix and saves it in a csv file
         input: path to mid file
         output: path to piano_roll csv file
     """
     pm = pretty_midi.PrettyMIDI(filepath)
-    pr=pm.get_piano_roll()
+    pr=pm.get_piano_roll(fs)
     df = pd.DataFrame(pr)
     df.to_csv(filepath[:-3]+"csv")
     return filepath[:-3]+"csv"
 
-def piano_roll_to_mid_file(pianoroll_matrix,fname):
+def piano_roll_to_mid_file(pianoroll_matrix,fname,fs=100):
     """ input: piano roll matrix with shape (number of notes, time steps)
         output: string with path to mid file
     """
-    piano_roll_to_pretty_midi(pianoroll_matrix).write(fname)
+    piano_roll_to_pretty_midi(pianoroll_matrix,fs).write(fname)
     return os.path.join(os.getcwd(),fname)
     
     
-def midfile_to_piano_roll_ins(filepath,instrument_n=0):
+def midfile_to_piano_roll_ins(filepath,instrument_n=0,fs=100):
     """ convert mid file to piano_roll csv matrix, but selecting a specific instrument in the mid file
         input: path to mid file, intrument to select in midfile
         output: path to piano_roll csv file
     """
     pm = pretty_midi.PrettyMIDI(filepath)
-    pr=pm.instruments[instrument_n].get_piano_roll()
+    pr=pm.instruments[instrument_n].get_piano_roll(fs)
     df = pd.DataFrame(pr)
     df.to_csv(filepath[:-3]+str(instrument_n)+".csv")
     return filepath[:-3]+str(instrument_n)+".csv"
 
-def load_all_dataset(dirpath):
+def load_all_dataset(dirpath,binarize=True):
     """ given a diretory finds all the csv in the diretory an load them as numpy arrays
         input: path a diretory
         output: list of numpy arrays
     """
-    return [pd.read_csv(os.path.join(dirpath, file)).values for file in sorted(os.listdir(dirpath)) if file.endswith(".csv")]
+    if(binarize):
+        return [(pd.read_csv(os.path.join(dirpath, file)).values>0).astype(int) for file in sorted(os.listdir(dirpath)) if file.endswith(".csv")]
+    else:
+        return [pd.read_csv(os.path.join(dirpath, file)).values for file in sorted(os.listdir(dirpath)) if file.endswith(".csv")]
 
 def load_all_dataset_names(dirpath):
-    """ given a diretory finds all the csv in the diretory an split the first part
+    """ given a diretory finds all the csv in the d
+iretory an split the first part
         of the name of the file to return as a tag for the associated numpy array
         input: path a diretory
         output: list of strings
@@ -136,14 +140,14 @@ def visualize_piano_roll(pianoroll_matrix):
         effect: generates a nice graph with the piano roll visualization
     """
     if(pianoroll_matrix.shape[0]==128):
-        pianoroll_matrix=pianoroll_matrix.T
+        pianoroll_matrix=pianoroll_matrix.T.astype(float)
     track = pproll.Track(pianoroll=pianoroll_matrix, program=0, is_drum=False, name='piano roll')   
     # Plot the piano-roll
     fig, ax = track.plot()
     plt.show()
 
-def embed_play_v1(piano_roll_matrix):
-    return IPython.display.Audio(data=piano_roll_to_pretty_midi(piano_roll_matrix).synthesize(),rate=44100)
+def embed_play_v1(piano_roll_matrix,fs=100):
+    return IPython.display.Audio(data=piano_roll_to_pretty_midi(piano_roll_matrix,fs).synthesize(),rate=44100)
     
 
     
