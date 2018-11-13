@@ -96,7 +96,7 @@ class pianoroll_dataset_chunks(Dataset):
         return datp.get_numkeys(self.fulldata)[0]
         
     def view_pianoroll(self,idx):
-        datp.visualize_piano_roll(self.[idx].squeeze(1).numpy().astype(float))
+        datp.visualize_piano_roll(self[idx].squeeze(1).numpy().astype(float))
         
 def one_end(input_tensor,k=1):
     return torch.cat( (input_tensor[k:], torch.zeros(size=(k,input_tensor.shape[1],input_tensor.shape[2]))) )
