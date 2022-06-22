@@ -10,7 +10,7 @@ matplotlib==2.2.3
 nbconvert==5.3.1
 nbformat==4.4.0
 notebook==5.5.0
-numpy==1.15.2
+numpy==1.22.0
 pandas==0.23.4
 pretty-midi==0.2.8
 pyFluidSynth==1.2.5
